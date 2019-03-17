@@ -2,6 +2,7 @@ package client
 
 import (
 	"fmt"
+	"github.com/tgo-team/tgo-talk/tgo/packets"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"os"
 )
@@ -50,4 +51,32 @@ func Execute(cmdStr string)  {
 			}
 		}
 	}
+}
+
+
+
+// SetCurrentChannel 设置当前管道
+var currentID uint64
+func SetCurrentChannel(channelID uint64)  {
+	currentID = channelID
+}
+// GetCurrentChannel 获取当前管道
+func GetCurrentChannel() uint64  {
+	return currentID
+}
+
+// showSendState 显示发送状态
+func showSendState() {
+	channelID := GetCurrentChannel()
+	if channelID > 0 {
+		fmt.Print(fmt.Sprintf("%d>", channelID))
+	} else {
+		fmt.Print(">")
+	}
+}
+
+// showRevMsg 显示接受的消息
+func showRevMsg(msgPacket *packets.MessagePacket,) {
+	fmt.Println(fmt.Sprintf("收到[%d]的消息->%s",msgPacket.From,string(msgPacket.Payload)))
+	fmt.Print(">")
 }

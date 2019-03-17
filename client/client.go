@@ -3,6 +3,7 @@ package client
 import (
 	"bytes"
 	"fmt"
+	"github.com/tgo-team/tgo-cli/util"
 	"github.com/tgo-team/tgo-talk/protocol/mqtt"
 	"github.com/tgo-team/tgo-talk/tgo"
 	"github.com/tgo-team/tgo-talk/tgo/packets"
@@ -140,7 +141,7 @@ func (c *Client) sendPacket(packet packets.Packet) error  {
 }
 
 func (c *Client) SendMsg(cid uint64,payload []byte) error  {
-	msgPacket := packets.NewMessagePacket(1,cid,payload)
+	msgPacket := packets.NewMessagePacket(util.MessageID(fmt.Sprintf("%d-%d",cid,time.Now().UnixNano())),cid,payload)
 	err := c.sendPacket(msgPacket)
 	if err!=nil {
 		return err
@@ -171,8 +172,7 @@ func (c *Client) msgLoop()  {
 		}
 		msgPacket,ok := packet.(*packets.MessagePacket)
 		if ok {
-			fmt.Println(fmt.Sprintf("-> %v\r",string(msgPacket.Payload)))
-			fmt.Print(">")
+			showRevMsg(msgPacket)
 		}
 	}
 }

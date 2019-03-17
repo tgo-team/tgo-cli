@@ -6,5 +6,8 @@ func main() {
 	c := client.New(client.NewOptions())
 	client.SetupCMD(c)
 
+	//chat := ui.NewChatUI()
+	//
+	//chat.Init()
 
 }
